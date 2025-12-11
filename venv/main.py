@@ -17,7 +17,7 @@ while True:
 
         
     screen.blit(sky_surface, (0,0))
-    screen.blit(ground_surface, (0,600))
+    screen.blit(ground_surface, (0,300))
     
     # draw all of our elements + update everything
     pygame.display.update()
