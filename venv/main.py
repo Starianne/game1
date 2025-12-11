@@ -7,6 +7,7 @@ pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 
 sky_surface = pygame.image.load('graphics/Sky.png')
+ground_surface = pygame.image.load('graphics/ground.png')
 
 while True:
     for event in pygame.event.get():
@@ -16,6 +17,7 @@ while True:
 
         
     screen.blit(sky_surface, (0,0))
+    screen.blit(ground_surface, (0,600))
     
     # draw all of our elements + update everything
     pygame.display.update()
