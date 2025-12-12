@@ -5,6 +5,7 @@ pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
+game_active = True
 
 #font
 text_font = pygame.font.Font('font/Pixeltype.ttf', 50)
@@ -39,37 +40,40 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and player_rect.bottom == 300: #space = jump only if on floor
                 player_gravity = -20
-        
-    #background surface
-    screen.blit(sky_surface, (0,0))
-    screen.blit(ground_surface, (0,300))
+    
+    if game_active:
+        #background surface
+        screen.blit(sky_surface, (0,0))
+        screen.blit(ground_surface, (0,300))
 
-    #title surface
-    pygame.draw.rect(screen, '#c0e8ec', title_rect)
-    pygame.draw.rect(screen, '#c0e8ec', title_rect,20)
+        #title surface
+        pygame.draw.rect(screen, '#c0e8ec', title_rect)
+        pygame.draw.rect(screen, '#c0e8ec', title_rect,20)
 
-    screen.blit(title_surface,title_rect)
+        screen.blit(title_surface,title_rect)
 
-    #snail movement
-    snail_rect.x -= 4
-    if snail_rect.right <= 0:
-        snail_rect.left = 800
-    screen.blit(snail_surface,snail_rect)
+        #snail movement
+        snail_rect.x -= 4
+        if snail_rect.right <= 0:
+            snail_rect.left = 800
+        screen.blit(snail_surface,snail_rect)
 
-    #collision
-    if snail_rect.colliderect(player_rect):
-        pygame.quit()
-        exit()
+        #collision
+        if snail_rect.colliderect(player_rect):
+            game_active=False
 
-    #player movement
-    player_gravity += 1
-    player_rect.y += player_gravity
+        #player movement
+        player_gravity += 1
+        player_rect.y += player_gravity
 
-    #player floor
-    if player_rect.bottom >= 300:
-        player_rect.bottom = 300
+        #player floor
+        if player_rect.bottom >= 300:
+            player_rect.bottom = 300
 
-    screen.blit(player_surf,player_rect)
+        #player surface
+        screen.blit(player_surf,player_rect)
+    else:
+        screen.fill('Yellow')
 
     # draw all of our elements + update everything
     pygame.display.update()
