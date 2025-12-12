@@ -37,6 +37,8 @@ while True:
     pygame.draw.rect(screen, 'Pink', title_rect,20)
     pygame.draw.rect(screen, 'Pink', title_rect)
     
+    pygame.draw.ellipse(screen, 'Gold', pygame.Rect(50,200,100,100))
+
     screen.blit(title_surface,title_rect)
 
     snail_rect.x -= 4
