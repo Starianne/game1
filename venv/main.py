@@ -56,10 +56,14 @@ while True:
         snail_rect.left = 800
     screen.blit(snail_surface,snail_rect)
 
+    #collision
+    if snail_rect.colliderect(player_rect):
+        pygame.quit()
+        exit()
+
     #player movement
     player_gravity += 1
     player_rect.y += player_gravity
-    player_rect.left += 1
 
     #player floor
     if player_rect.bottom >= 300:
