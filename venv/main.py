@@ -31,6 +31,28 @@ def obstacle_movement(obstacle_list):
     else: # otherwise returns none and you cant append none
         return []
 
+def collisions(player, obstacles):
+    if obstacles:
+        for obstacle_rect in obstacles:
+            if player.colliderect(obstacle_rect): 
+                return False
+    return True
+
+def player_animation():
+    #display jump surface when player is not on floor
+    global player_surf, player_index
+
+    if player_rect.bottom <300:
+        player_surf = player_jump
+    else:
+        #play walking animation if player on floor
+        player_index +=0.1 #slow animation speed between indexes
+        if player_index >= len(player_walk):
+            player_index = 0
+        player_surf = player_walk[int(player_index)]
+    
+
+
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -58,7 +80,13 @@ fly_surf = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
 obstacle_rect_list = []
 
 #player
-player_surf = pygame.image.load('graphics/player/player_walk_1.png').convert_alpha()
+player_walk_1 = pygame.image.load('graphics/player/player_walk_1.png').convert_alpha()
+player_walk_2 = pygame.image.load('graphics/player/player_walk_2.png').convert_alpha()
+player_walk = [player_walk_1,player_walk_2]
+player_index = 0
+player_jump = pygame.image.load('graphics/player/jump.png').convert_alpha()
+
+player_surf = player_walk[player_index]
 player_rect = player_surf.get_rect(midbottom = (80,300))
 player_gravity = 0
 
@@ -111,7 +139,7 @@ while True:
         
 
         #collision
-       
+        game_active = collisions(player_rect,obstacle_rect_list)
 
         #player movement
         player_gravity += 1
@@ -120,13 +148,16 @@ while True:
         #player floor
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
-
+        player_animation()
         #player surface
         screen.blit(player_surf,player_rect)
         display_score()
     else:
         screen.fill((94,129,162))
         screen.blit(player_stand, player_stand_rect)
+        obstacle_rect_list.clear()
+        player_rect.midbottom = (80,300)
+        player_gravity = 0
 
         #format best time
         best_seconds = (best_time // 100) % 60
