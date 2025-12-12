@@ -37,7 +37,7 @@ while True:
                player_gravity = -20
                 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE: #space = jump
+            if event.key == pygame.K_SPACE and player_rect.bottom == 300: #space = jump only if on floor
                 player_gravity = -20
         
     #background surface
