@@ -1,8 +1,10 @@
 import pygame
 from sys import exit
+from random import randint
 
 def display_score():
     current_time = pygame.time.get_ticks() - start_time
+    #formatting current time
     seconds = (current_time // 100) % 60
     if seconds < 10:
         seconds = f"0{seconds}"
@@ -12,13 +14,29 @@ def display_score():
     score_surf = text_font.render(f'{minutes}:{seconds}',False,(64,64,64))
     score_rect = score_surf.get_rect(topleft = (0,0))
     screen.blit(score_surf,score_rect)
-    return current_time
+    return current_time # to use later
+
+def obstacle_movement(obstacle_list):
+    if obstacle_list: #if a list is empty python evaluates to false
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 5
+            if obstacle_rect.bottom == 300:
+                screen.blit(snail_surface, obstacle_rect)
+            else:
+                screen.blit(fly_surf, obstacle_rect)
+        
+        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100] #we only copy every item in list IF x value is bigger than -100
+          
+        return obstacle_list
+    else: # otherwise returns none and you cant append none
+        return []
+
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
-game_active = True
+game_active = False
 start_time = 0
 best_time = 0
 
@@ -30,10 +48,14 @@ sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 
 
-
+#Obstacles
 #snail
 snail_surface= pygame.image.load('graphics/snail/snail1.png').convert_alpha()
-snail_rect = snail_surface.get_rect(bottomright = (600, 300))
+
+#fly
+fly_surf = pygame.image.load('graphics/fly/fly1.png').convert_alpha()
+
+obstacle_rect_list = []
 
 #player
 player_surf = pygame.image.load('graphics/player/player_walk_1.png').convert_alpha()
@@ -51,42 +73,45 @@ title_rect = title_surface.get_rect(center =(400,50))
 game_message = text_font.render("Press space to run",False,(111,196,169))
 game_message_rect = game_message.get_rect(center = (400,320))
 
+#timer
+obstacle_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(obstacle_timer, 1500)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()    
             exit()
         if game_active:
-            if event.type ==pygame.MOUSEBUTTONDOWN:
-                if player_rect.collidepoint(event.pos):
-                    player_gravity = -20
-                    
+            #jump with space
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom == 300: #space = jump only if on floor
                     player_gravity = -20
         else:
+            #restart game
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                snail_rect.left = 800
                 start_time = pygame.time.get_ticks()
-    
+
+        if event.type == obstacle_timer and game_active:
+            if randint(0,2): #if true (1) make snail
+                obstacle_rect_list.append(snail_surface.get_rect(bottomright = (randint(900,1100), 300)))
+            else:
+                obstacle_rect_list.append(fly_surf.get_rect(bottomright = (randint(900,1100), 200)))
     if game_active:
         #background surface
         screen.blit(sky_surface, (0,0))
         screen.blit(ground_surface, (0,300))
-        time = display_score()
+        time = display_score() #get current time
         if time > best_time:
-            best_time = time
+            best_time = time #set best time
 
-        #snail movement
-        snail_rect.x -= 4
-        if snail_rect.right <= 0:
-            snail_rect.left = 800
-        screen.blit(snail_surface,snail_rect)
+        #obstacle movement
+        obstacle_rect_list= obstacle_movement(obstacle_rect_list)
+        
 
         #collision
-        if snail_rect.colliderect(player_rect):
-            game_active=False
+       
 
         #player movement
         player_gravity += 1
@@ -103,6 +128,7 @@ while True:
         screen.fill((94,129,162))
         screen.blit(player_stand, player_stand_rect)
 
+        #format best time
         best_seconds = (best_time // 100) % 60
         if best_seconds < 10:
             best_seconds = f"0{best_seconds}"
