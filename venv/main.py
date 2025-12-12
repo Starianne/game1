@@ -29,7 +29,7 @@ player_gravity = 0
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
+            pygame.quit()    
             exit()
 
         #if event.type ==pygame.MOUSEMOTION:
@@ -38,10 +38,7 @@ while True:
                 #print("boo")
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                print('jump')   
-
-        if event.type == pygame.KEYUP:
-            print('key up')
+                player_gravity = -20
         
     #background surface
     screen.blit(sky_surface, (0,0))
