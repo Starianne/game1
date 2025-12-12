@@ -12,6 +12,7 @@ def display_score():
     score_surf = text_font.render(f'{minutes}:{seconds}',False,(64,64,64))
     score_rect = score_surf.get_rect(topleft = (0,0))
     screen.blit(score_surf,score_rect)
+    return current_time
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -19,6 +20,7 @@ pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 game_active = True
 start_time = 0
+best_time = 0
 
 #font
 text_font = pygame.font.Font('font/Pixeltype.ttf', 50)
@@ -45,7 +47,7 @@ player_stand_rect = player_stand.get_rect(center=(400,200))
 #title - intro
 title_surface = text_font.render('My game', False, (111,196,169)).convert()
 title_rect = title_surface.get_rect(center =(400,50))
-
+#descript - intro
 game_message = text_font.render("Press space to run",False,(111,196,169))
 game_message_rect = game_message.get_rect(center = (400,320))
 
@@ -72,8 +74,9 @@ while True:
         #background surface
         screen.blit(sky_surface, (0,0))
         screen.blit(ground_surface, (0,300))
-
-        
+        time = display_score()
+        if time > best_time:
+            best_time = time
 
         #snail movement
         snail_rect.x -= 4
@@ -99,8 +102,21 @@ while True:
     else:
         screen.fill((94,129,162))
         screen.blit(player_stand, player_stand_rect)
+
+        best_seconds = (best_time // 100) % 60
+        if best_seconds < 10:
+            best_seconds = f"0{best_seconds}"
+        best_minutes = best_time // 6000
+        if best_minutes < 10:
+            best_minutes = f"0{best_minutes}"
+
+        best_time_message = text_font.render(f"Your best time is {best_minutes}:{best_seconds}",False,(111,196,169))
+        best_time_message_rect = best_time_message.get_rect(center = (400,330))
         screen.blit(title_surface,title_rect)
-        screen.blit(game_message, game_message_rect)
+        if best_time == 0:
+            screen.blit(game_message, game_message_rect)
+        else:
+            screen.blit(best_time_message, best_time_message_rect)
 
         
     # draw all of our elements + update everything
