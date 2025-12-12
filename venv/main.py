@@ -32,14 +32,18 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()    
             exit()
-
-        if event.type ==pygame.MOUSEBUTTONDOWN:
-           if player_rect.collidepoint(event.pos):
-               player_gravity = -20
-                
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and player_rect.bottom == 300: #space = jump only if on floor
-                player_gravity = -20
+        if game_active:
+            if event.type ==pygame.MOUSEBUTTONDOWN:
+                if player_rect.collidepoint(event.pos):
+                    player_gravity = -20
+                    
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player_rect.bottom == 300: #space = jump only if on floor
+                    player_gravity = -20
+        else:
+            if event.type == pygame.KEYDOWN:
+                game_active = True
+                snail_rect.left = 800
     
     if game_active:
         #background surface
@@ -74,6 +78,8 @@ while True:
         screen.blit(player_surf,player_rect)
     else:
         screen.fill('Yellow')
+        if event.type == pygame.KEYDOWN:
+            game_active = True
 
     # draw all of our elements + update everything
     pygame.display.update()
