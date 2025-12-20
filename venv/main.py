@@ -1,6 +1,18 @@
 import pygame
 from sys import exit
-from random import randint
+from random import randint 
+
+class Player(pygame.sprite.Sprite): #inherits from pygame class
+    def __init__(self):
+        super().__init__() #overriding class
+        self.image = pygame.image.load('graphics/player/player_walk_1.png').convert_alpha()
+        self.rect = self.image.get_rect(midbottom =(200,300))
+
+    def player_input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
+            
+
 
 def display_score():
     current_time = pygame.time.get_ticks() - start_time
@@ -68,6 +80,9 @@ text_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 #background
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
+
+player = pygame.sprite.GroupSingle()
+player.add(Player())
 
 
 #Obstacles
@@ -178,6 +193,8 @@ while True:
         player_animation()
         #player surface
         screen.blit(player_surf,player_rect)
+        player.draw(screen)
+
         display_score()
     else:
         screen.fill((94,129,162))
