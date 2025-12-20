@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite): #inherits from pygame class
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
-            
+
 
 
 def display_score():
