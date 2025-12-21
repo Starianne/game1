@@ -112,6 +112,15 @@ def collisions(player, obstacles):
                 return False
     return True
 
+def collision_sprite():
+    if pygame.sprite.spritecollide(player.sprite,obstacle_group,False): #sprite, group , boolean are arguments
+        obstacle_group.empty() #get rid of all sprites on screen so you arent stuck after dying
+        return False
+    else:
+        return True
+
+
+
 def player_animation():
     #display jump surface when player is not on floor
     global player_surf, player_index
@@ -260,6 +269,10 @@ while True:
         player_animation()
         #player surface
         screen.blit(player_surf,player_rect)'''
+
+        game_active = collision_sprite()
+
+
 #put player sprite on screen
         player.draw(screen)
         player.update()
