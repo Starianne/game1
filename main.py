@@ -82,14 +82,14 @@ class Obstacle(pygame.sprite.Sprite):
 def display_score():
     current_time = pygame.time.get_ticks() - start_time
     #formatting current time
-    seconds = (current_time // 100) % 60
+    seconds = (current_time // 1000) % 60
     if seconds < 10:
         seconds = f"0{seconds}"
-    minutes = current_time // 6000
+    minutes = current_time // 60000
     if minutes < 10:
         minutes = f"0{minutes}"
     score_surf = text_font.render(f'{minutes}:{seconds}',False,(64,64,64))
-    score_rect = score_surf.get_rect(topleft = (0,0))
+    score_rect = score_surf.get_rect(topleft = (10,10))
     screen.blit(score_surf,score_rect)
     return current_time # to use later
 
@@ -180,10 +180,10 @@ while True:
         screen.blit(player_stand, player_stand_rect)
 
         #format best time
-        best_seconds = (best_time // 100) % 60
+        best_seconds = (best_time // 1000) % 60
         if best_seconds < 10:
             best_seconds = f"0{best_seconds}"
-        best_minutes = best_time // 6000
+        best_minutes = best_time // 60000
         if best_minutes < 10:
             best_minutes = f"0{best_minutes}"
 
