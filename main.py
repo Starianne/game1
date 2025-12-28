@@ -102,7 +102,7 @@ def collision_sprite():
         return True
 
 pygame.init()
-screen = pygame.display.set_mode((800,400))
+screen = pygame.display.set_mode((1720,1010))
 pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 game_active = False
